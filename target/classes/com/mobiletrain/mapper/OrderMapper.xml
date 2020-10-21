@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper.xml与Mapper/DAO接口产生关联-->
+<mapper namespace="com.mobiletrain.mapper.OrderMapper">
+    <!--select子标签与DAO当中的方法产生关联-id属性-->
+    <select id="queryByUid" resultType="Order">
+         select * from tb_order where uid=#{uid}
+    </select>
+
+    <insert id="insert">
+        <selectKey keyProperty="id" resultType="String" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+
+        insert into tb_order (total_amount,state,creation_time,uid) values (
+        #{totalAmount},
+        #{state},
+        #{creationTime},
+        #{uid}
+        );
+    </insert>
+
+    <delete id="delete">
+        delete from tb_order where id=#{oid}
+    </delete>
+
+    <update id="update">
+        update tb_order
+        <set>
+            <if test="totalAmount !=null">
+            total_amount=#{totalAmount},
+            </if>
+            <if test="state != null">
+            state=#{state},
+            </if>
+            <if test="creationTime != null">
+            creation_time=#{creationTime},
+            </if>
+            <if test="uid != null">
+            uid=#{uid}
+            </if>
+        </set>
+
+        where id=#{id}
+    </update>
+
+</mapper>

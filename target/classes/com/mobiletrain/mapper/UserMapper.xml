@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper.xml与Mapper/DAO接口产生关联-->
+<mapper namespace="com.mobiletrain.mapper.UserMapper">
+    <resultMap id="userResultMap" type="User" autoMapping="true">
+        <id property="id" column="uid"/>
+        <!--to many-->
+        <collection property="carts"
+                    column="ctid"
+                    resultMap="com.mobiletrain.mapper.CartMapper.cartResultMap"
+                    autoMapping="true"/>
+    </resultMap>
+
+    <!--select子标签与DAO当中的方法产生关联-id属性-->
+    <select id="queryByUsernameAndPassword" resultMap="userResultMap">
+        select *,tb_user.id as uid,tb_cart.id as ctid,tb_product.id as pid
+        from tb_user
+        inner join tb_cart on tb_user.id=tb_cart.uid
+        inner join tb_product on tb_cart.pid=tb_product.id
+        where username=#{username} and password=#{password}
+    </select>
+
+</mapper>

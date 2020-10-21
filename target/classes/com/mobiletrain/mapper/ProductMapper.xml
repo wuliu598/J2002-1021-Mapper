@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper.xml与Mapper/DAO接口产生关联-->
+<mapper namespace="com.mobiletrain.mapper.ProductMapper">
+    <!--select子标签与DAO当中的方法产生关联-id属性-->
+    <resultMap id="productResultMap" type="Product" autoMapping="true">
+        <id property="id" column="pid"/>
+    </resultMap>
+
+    <select id="search" resultMap="productResultMap">
+        select * ,tb_product.id as pid from tb_product
+        <where>
+            <if test="minPrice != null">
+                and price>=#{minPrice}
+            </if>
+
+            <if test="maxPrice != null">
+                and price &lt;=#{maxPrice}
+            </if>
+        </where>
+    </select>
+
+</mapper>
